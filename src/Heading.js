@@ -5,8 +5,8 @@ import React from "react"
 
 function heading () {
     return(
-        <div className="flex justify-center items-center py-4 shadow-sm space-x-11">
-            <div>LOGO</div>
+        <div className="flex justify-center items-center shadow-sm space-x-11">
+            <div><img className="h-20" src="./imgs/Easy.png" alt="logo" ></img></div>
             <div className="text-black font-semibold text-[15px] ">
             <ul className="flex flex-row  space-x-12">
                 <li>HOME</li>
