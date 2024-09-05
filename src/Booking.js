@@ -1,9 +1,8 @@
 import Heading from "./Heading"
-import Footer from "./Footer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationDot, faCalendarDays, faUsers, faUserShield } from '@fortawesome/free-solid-svg-icons'
 
-function booking () {
+function Booking () {
     return (
         <div className="">
            
@@ -62,4 +61,4 @@ function booking () {
     )
 }
 
-export default booking
+export default Booking
