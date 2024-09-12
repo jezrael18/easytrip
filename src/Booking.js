@@ -1,59 +1,89 @@
+import React from "react";
 import Heading from "./Heading"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationDot, faCalendarDays, faUsers, faUserShield } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faLocationDot, faCalendarDays, faUsers, faUserShield } from '@fortawesome/free-solid-svg-icons'
+import { useState, useEffect } from "react"
 
-function Booking () {
+function Booking() {
+    const [isListVisible, setIsListVisible] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selected, setSelected] = useState('');
+    const [origins, setOrigins] = useState([]);
+
+    const origin = () => {
+        const allOrigins = [
+            { id: 1, name: 'Cebu' },
+            { id: 2, name: 'Bohol' },
+            { id: 3, name: 'Leyte' },
+            { id: 4, name: 'Negros' },
+            { id: 5, name: 'Masbate' }
+
+        ]
+        return allOrigins.filter(item =>
+            item.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+        );
+    }
+    useEffect(() => {
+        setOrigins(origin(searchTerm));
+    }, [searchTerm]);
+
+    const handleInputClick = () => {
+        setIsListVisible(true);
+    };
+
+    const handleInputChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleOptionSelect = (item) => {
+        setSelected(item.name);
+        setSearchTerm(item.name);
+        setIsListVisible(false);
+    };
+
+    const handleClickOutside = (event) => {
+        if (!event.target.closest('.search-container')) {
+            setIsListVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    }, []);
+
     return (
         <div className="">
-           
             <Heading />
             <div id="main-holder" className="two-holder">
-                <div className="IamPicture">
+                {/* <div className="IamPicture">
                     <img src="" alt="" />
-                </div>
-                <div id="bookingHolder" className="">
+                </div> */}
+                <div className="w-[60em] flex flex-col search-container"
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}>
                     <p className="text-center text-[35px] font-medium pb-[35px]">Online Booking</p>
-                    <table className="">
-                        <tr className="">
-                            <td className="text-[20px] pr-[20px] pl-[20px]"><p><FontAwesomeIcon className="text-cyan-800 text-lg" icon={faLocationDot} /> Origin</p></td>
-                            <td className="text-[20px] pr-[20px] pl-[20px]"><p><FontAwesomeIcon className="text-cyan-800 text-lg" icon={faLocationDot} /> Destination</p></td>
-                        </tr>
-                        <tr>
-                            <td className="text-[20px] pr-[20px] pl-[20px]">
-                                <select name="" id="">
-                                    <option value="">---</option>
-                                    <option value="CEB">CEB- CEBU</option>
-                                </select>
-                            </td>
-                            <td className="text-[20px] pr-[20px] pl-[20px]">
-                                <select name="" id="">
-                                    <option value="">---</option>
-                                    <option value="">---</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="text-[20px] pr-[20px] pl-[20px]"><p><FontAwesomeIcon className="text-cyan-800 text-lg" icon={faCalendarDays} /> Departure Date</p></td>
-                            <td className="text-[20px] pr-[20px] pl-[20px]"><p><FontAwesomeIcon className="text-cyan-800 text-lg"  icon={faUsers} /> Adult/Child</p></td>
-                        </tr>
-                        <tr>
-                            <td className="text-[20px] pr-[20px] pl-[20px]">
-                                <select name="" id="">
-                                    <option value="">---</option>
-                                </select>
-                            </td>
-                            <td className="text-[20px] pr-[20px] pl-[20px]">
-                                <select name="" id="">
-                                    <option value="">---</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <br />
-                        <p className="ml-[20px]"><FontAwesomeIcon className="text-cyan-800 text-lg" icon={faUserShield} /> With Insurrances</p>
-                        <input id="insurance-radio-yes" name="insurance" type="radio" className="ml-[20px] hover:cursor-pointer"/> &nbsp; <label htmlFor="insurance-radio-yes">Yes</label> &nbsp;&nbsp;
-                        <input id="insurance-radio-no" name="insurance" type="radio" className="hover:cursor-pointer" /> &nbsp; <label htmlFor="insurance-radio-no">Gusto Na Mamatay</label>
-                    </table>
+
+                    <label htmlFor="origin">From</label>
+                    <input id="origin"
+                        name="origin"
+                        type="text"
+                        placeholder="Search..."
+                        value={selected || searchTerm}
+                        onClick={handleInputClick}
+                        onChange={handleInputChange}
+                        className="w-96 h-10 border-2 p-2 " />
+
+                    {isListVisible && searchTerm && origins.length > 0 && (
+                        <ul>
+                            {origins.map(item => (
+                                <li className="cursor-pointer" key={item.id} onClick={() => handleOptionSelect(item)}>{item.name}</li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
+
             </div>
 
         </div>
